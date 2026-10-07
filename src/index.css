@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0b1f3a;
+  --color-ink-light: #14315a;
+  --color-ink-dark: #07142a;
+  --color-sky: #3d8bd9;
+  --color-sky-soft: #e8f1fb;
+  --color-sun: #e8a33d;
+  --color-sun-light: #f4c777;
+  --color-cream: #faf8f4;
+  --color-stone: #5b6677;
+  --color-line: #e3e0d8;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+    --animate-blink: blink 1s step-end infinite;
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+    body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  ::selection {
+    background: var(--color-sun-light);
+    color: var(--color-ink-dark);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-sky);
+    outline-offset: 3px;
+  }
+}
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl px-6 md:px-10;
+}
+
+@utility section-y {
+  @apply py-20 md:py-32;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300;
+}
+
+@utility btn-primary {
+  @apply btn bg-sun text-ink-dark hover:-translate-y-0.5 hover:bg-sun-light hover:shadow-lg;
+}
+
+@utility btn-dark {
+  @apply btn bg-ink text-cream hover:-translate-y-0.5 hover:bg-ink-light hover:shadow-lg;
+}
+
+@utility btn-ghost {
+  @apply btn border border-current/30 hover:border-current hover:bg-white/5;
+}
+
+@layer components {
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.22em] text-sky;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-sun;
+  }
+}
