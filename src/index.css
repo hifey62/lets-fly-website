@@ -11,6 +11,7 @@
   --color-cream: #faf8f4;
   --color-stone: #5b6677;
   --color-line: #e3e0d8;
+  --color-sun-deep: #a8690a;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -33,18 +34,24 @@
   html {
     scroll-behavior: smooth;
   }
-    body {
+  body {
     background-color: var(--color-cream);
     color: var(--color-ink);
     font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.18;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   ::selection {
     background: var(--color-sun-light);
@@ -60,9 +67,8 @@
 }
 
 @utility section-y {
-  @apply py-20 md:py-32;
+  @apply py-24 md:py-36;
 }
-
 @utility btn {
   @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-all duration-300;
 }

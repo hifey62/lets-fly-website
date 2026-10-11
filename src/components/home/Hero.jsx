@@ -90,7 +90,7 @@ export default function Hero() {
 
           <motion.h1
             variants={item}
-            className="mt-8 text-5xl leading-[1.05] sm:text-6xl md:text-7xl lg:text-8xl"
+            className="mt-8 text-4xl leading-[1.12] sm:text-5xl md:text-6xl lg:text-7xl"
           >
             {hero.prefix}
             <span className="block min-h-[1.15em] italic text-sun">

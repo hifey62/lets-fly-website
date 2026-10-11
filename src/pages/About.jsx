@@ -114,9 +114,9 @@ export default function About() {
       </section>
 
       <Impact />
-      <div className="pt-20 md:pt-32">
+
         <CTA />
-      </div>
+      
     </Page>
   );
 }
