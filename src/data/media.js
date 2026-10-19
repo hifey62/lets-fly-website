@@ -35,7 +35,7 @@ export const outreachVideos = [
     tag: "Cross River, Akure & Ondo City",
     type: "youtube",
     id: "aqz-KE-bpKQ", // demo video, replace with the real YouTube ID
-    thumb: unsplash("photo-1523050854058-8df90110c9f1"),
+    thumb: unsplash("photo-1509062522246-3755977927d7"),
   },
   {
     title: "Orphanage Homes Outreach",
