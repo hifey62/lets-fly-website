@@ -59,7 +59,7 @@ export const aboutImage = unsplash("photo-1522202176988-66273c2fd55f");
 
 // one per program, in the same order as `programs` in site.js
 export const programImages = [
-  unsplash("photo-1523050854058-8df90110c9f1"), // Educational Support
+  unsplash("photo-1509062522246-3755977927d7"), // Educational Support
   unsplash("photo-1522202176988-66273c2fd55f"), // Career & Mentorship
   unsplash("photo-1509062522246-3755977927d7"), // Opportunities & Global Exposure
   unsplash("photo-1503676260728-1c00da094a0b"), // Health & Wellbeing
