@@ -37,11 +37,6 @@ export const outreachVideos = [
     url: "https://youtube.com/shorts/LhJh3RC06zM?si=ByFwlMlVeNROJ7DS",
   },
   {
-    title: "Eagle's Guide Outreach",
-    tag: "Ondo City",
-    url: "https://youtube.com/shorts/LhJh3RC06zM?si=ByFwlMlVeNROJ7DS",
-  },
-  {
     title: "Health Education Sessions",
     tag: "Rural Ondo State",
     url: "https://youtube.com/shorts/QY0JKqx8jT0?si=S73_Bg4PfRxI4zqJ",
