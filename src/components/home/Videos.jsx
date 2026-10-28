@@ -4,57 +4,64 @@ import { Play, X } from "lucide-react";
 import Reveal from "../Reveal";
 import { outreachVideos } from "../../data/media";
 
-const thumbOf = (v) =>
-  v.thumb ||
-  (v.type === "youtube"
-    ? `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`
-    : "");
+// accepts a full link (shorts / youtu.be / watch?v= / embed) or a bare 11-character ID
+const getId = (video) => {
+  const input = video.url ?? video.id ?? "";
+  const match = input.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([\w-]{11})/);
+  return match ? match[1] : input.trim();
+};
 
-function VideoCard({ video, featured, onOpen }) {
+function Thumb({ video }) {
+  const id = getId(video);
+  const hq = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  const [src, setSrc] = useState(
+    video.thumb || `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+  );
+
+  // YouTube serves a tiny grey placeholder when the HD thumbnail doesn't exist
+  const fallback = () => {
+    if (!video.thumb) setSrc(hq);
+  };
+
+  return (
+    <img
+      src={src}
+      alt=""
+      loading="lazy"
+      onError={fallback}
+      onLoad={(e) => {
+        if (e.currentTarget.naturalWidth < 200) fallback();
+      }}
+      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+    />
+  );
+}
+
+function VideoCard({ video, onOpen }) {
   return (
     <button
       onClick={() => onOpen(video)}
-      className={`group relative block w-full overflow-hidden rounded-3xl bg-ink text-left ${
-        featured
-          ? "aspect-video lg:col-span-2 lg:row-span-2 lg:aspect-auto lg:min-h-[30rem]"
-          : "aspect-video"
-      }`}
+      className="group relative aspect-[9/16] w-[68%] shrink-0 snap-center overflow-hidden rounded-3xl bg-ink-dark text-left sm:w-[44%] md:w-72 lg:w-80"
     >
-      <img
-        src={thumbOf(video)}
-        alt=""
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-ink-dark/90 via-ink-dark/20 to-ink-dark/30 transition-colors duration-500 group-hover:from-ink-dark/95" />
+      <Thumb video={video} />
+      <div className="absolute inset-0 bg-linear-to-t from-ink-dark/90 via-ink-dark/10 to-ink-dark/30" />
 
-      {/* play button with a pulsing ring */}
+      <span className="absolute left-4 top-4 rounded-full bg-white/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-cream backdrop-blur-sm">
+        Short
+      </span>
+
       <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <span className="absolute inset-0 animate-ping rounded-full bg-sun/40" />
-        <span
-          className={`relative flex items-center justify-center rounded-full bg-sun text-ink-dark transition-transform duration-500 group-hover:scale-110 ${
-            featured ? "h-24 w-24" : "h-16 w-16"
-          }`}
-        >
-          <Play
-            size={featured ? 34 : 24}
-            fill="currentColor"
-            className="ml-1"
-          />
+        <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-sun text-ink-dark transition-transform duration-500 group-hover:scale-110">
+          <Play size={24} fill="currentColor" className="ml-1" />
         </span>
       </span>
 
-      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-sun-light">
+      <div className="absolute inset-x-0 bottom-0 p-5">
+        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-sun-light">
           {video.tag}
         </span>
-        <h3
-          className={`mt-2 text-cream ${
-            featured ? "text-3xl md:text-4xl" : "text-xl md:text-2xl"
-          }`}
-        >
-          {video.title}
-        </h3>
+        <h3 className="mt-2 text-xl text-cream">{video.title}</h3>
       </div>
     </button>
   );
@@ -83,7 +90,7 @@ function Lightbox({ video, onClose }) {
       <button
         onClick={onClose}
         aria-label="Close video"
-        className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-cream transition-colors hover:bg-white/10"
+        className="absolute right-5 top-5 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 text-cream transition-colors hover:bg-white/10"
       >
         <X size={22} />
       </button>
@@ -94,19 +101,17 @@ function Lightbox({ video, onClose }) {
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
-        className="aspect-video w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl"
+        className="aspect-[9/16] w-full max-w-[min(92vw,calc(85vh*9/16))] overflow-hidden rounded-2xl bg-black shadow-2xl"
       >
-        {video.type === "youtube" ? (
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0`}
-            title={video.title}
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-            className="h-full w-full"
-          />
-        ) : (
-          <video src={video.src} controls autoPlay className="h-full w-full" />
-        )}
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${getId(
+            video
+          )}?autoplay=1&rel=0&playsinline=1`}
+          title={video.title}
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowFullScreen
+          className="h-full w-full"
+        />
       </motion.div>
     </motion.div>
   );
@@ -115,7 +120,6 @@ function Lightbox({ video, onClose }) {
 export default function Videos() {
   const [active, setActive] = useState(null);
   const close = useCallback(() => setActive(null), []);
-  const [featured, ...rest] = outreachVideos;
 
   return (
     <section className="section-y relative overflow-hidden bg-ink text-cream">
@@ -138,9 +142,8 @@ export default function Videos() {
         </Reveal>
 
         <Reveal delay={0.2} className="mt-14">
-          <div className="grid gap-6 lg:grid-cols-3">
-            <VideoCard video={featured} featured onOpen={setActive} />
-            {rest.map((video) => (
+          <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 [scrollbar-width:none] md:mx-0 md:flex-wrap md:justify-center md:gap-6 md:overflow-visible md:px-0 md:pb-0">
+            {outreachVideos.map((video) => (
               <VideoCard key={video.title} video={video} onOpen={setActive} />
             ))}
           </div>
@@ -152,4 +155,4 @@ export default function Videos() {
       </AnimatePresence>
     </section>
   );
-}
+}``
